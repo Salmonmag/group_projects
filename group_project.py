@@ -1,2 +1,1 @@
-print("nothing")
-print("something")
+

@@ -1,1 +1,1 @@
-def something
+print("nothing")

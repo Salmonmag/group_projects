@@ -1,1 +1,14 @@
-print
+import json
+with open("special_characters.json", "r", encoding="utf-8") as file:
+    special_characters = json.load(file) #עבודה על קובץ json
+print(special_characters) #מדפיס את הקובץ כדי לראות את כל הסימנים
+
+def clean(text , special_characters):
+    clean_text = ()
+    for sigh in text: #עובר על כל אות בטקסט
+        if sigh in special_characters: #בודק אם הסימן ברשימת אימוגים אם כן הוא מדפיס הודעה מתאימה 
+            return "in text have a emoji"
+        elif sigh not in special_characters: #בדיקה אם הסימן לא ברשימת הסימנים והאימוגים
+            clean_text += sigh #אם הוא לא הוא יוסיך אותו לרשימה ריקה כדי שיהיה לנו רשימה חדשה בלי סימנים
+    return clean_text.strip() #הדפסת הרשימה החדשה ללא רווחים מיותרים
+

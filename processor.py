@@ -10,3 +10,12 @@ def processor(list: list)-> dict:
         else: #במידה והמשתמש קיים כבר, נוסיף עוד תגובה לרשימת
             comment_dict[temp_dict["reply_to"]].append(temp_dict["comment"])
     return comment_dict
+
+
+def find_short_comments(list: list):
+    short_list = []
+    for i in range(len(twit_list)): # עוברים כל םעם על שורה אחת מהרשימה
+        stringi = twit_list[i]["comment"].strip() #בכל מילון שאנחנו בודקים, נהפוך את התגובה לSTR 
+        if stringi.count(" ") + 1 < 5: #נבדוק את האורך של הרצועה, בעזרת ספירת הרווחים(+1) בשביל המילה האחרונה
+            short_list.append(stringi) # מוסיפים כל פעם שורה חדשה אם נמצא שהיא קטנה מחמש
+    return short_list

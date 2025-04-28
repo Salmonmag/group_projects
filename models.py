@@ -48,24 +48,22 @@ class UserComments:
             temp_list.append(i.split(" "))
         return int(sum(temp_list)/len(temp_list))
 
-    def positive_ratio(self)->int:
+        def positive_ratio(self)->int:
         """find if comment are positive or negative, and if it's positive, add this comment to count of positive words"""
         count_of_positive = 0
-        reviewed_comments=self.comments.split(" ")
-        for i in reviewed_comments:
-            for j in data_positive:
-                if i == j:
+        for i in self.comments:
+            reviewed_comments = i.split(" ")
+            for j in reviewed_comments:
+                if j in data_positive:
                     count_of_positive += 1
         return count_of_positive
 
     def negative_ratio(self)->int:
         """find if comment are positive or negative, and if it's negative, add this comment to count of negative words"""
         count_of_negative = 0
-        reviewed_comments=self.comments.split(" ")
-        for i in reviewed_comments:
-            for j in data_negative:
-                if i == j:
+        for i in self.comments:
+            reviewed_comments = i.lower().split(" ")
+            for j in reviewed_comments:
+                if j in data_negative:
                     count_of_negative += 1
         return count_of_negative
-
-

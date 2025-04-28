@@ -65,12 +65,12 @@ def comment_lengh(list: list):
     comment_sort_list=[]
     for i in range(len(list)):
         comment_stringi = list[i]["comment"]
-        count_word = len(list[i]["comment"])
+        count_word = len(comment_stringi.strip().split(" "))
         comment_sort_list.append((count_word, comment_stringi))
     comment_sort_list.sort()
     final_list = []
     for stringi in comment_sort_list:
-        final_list.append(stringi[1])
+        final_list.append(stringi)
     return final_list
 
 def most_positive_user(list:list):
@@ -87,7 +87,37 @@ def most_positive_user(list:list):
                 total_score -= 1 #אם שלילית מורידים מהמונה
         user_scores[user] = total_score #מכניסים למילון תוצאות שלנו את המשתמש(מפתח) והערך הוא הציון הסופי
 
-    most_positive = max(user_scores, key=user_scores.get)
+    most_positive = max(user_scores, key=user_scores.get) # עושה בדיקה של מי מהמשתמשים(בתוך המילון) בעל הציון הכי גבוה
     return most_positive
-test = most_positive_user(twiter_list)
-print(test)
+
+def most_negative_user(list:list):
+    update_dict = old_list_toNew_dict(list)
+    user_scores = {}
+    for user, comments in update_dict.items(): #עוברים על המילון ולוקחים את המפתח(שם) ורשימת התגובות
+        total_score = 0
+        for comment_text in comments: # עוברים על כל תגובה בנפרד בתוך הרשימת תגובות לכל משתמש
+            comment_obj = Comment(user, comment_text) #לוקחים את הערכים שיש לנו והופכים אותו לאובייקט
+            val = analyze_sentiment(comment_obj) # מכניסים את האוביקט שיש לנו לתוך הפונקציה בשביל לחשב אם התגובה חיובית או שלילית
+            if val == "positive":
+                total_score -= 1 # אם התגובה חיובית מוספית למונה
+            elif val == "negative":
+                total_score += 1 #אם שלילית מורידים מהמונה
+        user_scores[user] = total_score #מכניסים למילון תוצאות שלנו את המשתמש(מפתח) והערך הוא הציון הסופי
+
+    most_negative = max(user_scores, key=user_scores.get) # עושה בדיקה של מי מהמשתמשים(בתוך המילון) בעל הציון הכי גבוה
+    return most_negative
+
+def longest_and_shortest(list:list):
+    # list_minmax = []
+    # for i in range(len(list)):
+    #     comment = list[i]["comment"]
+    #     count_of_words = len(comment.split(" "))
+    #     list_minmax.append((count_of_words, comment))
+    # list_minmax.sort()
+    # print(f"the longest {list_minmax[0]}")
+    # print(list_minmax[-1])
+    list_minmax= comment_lengh(list)
+    print(f"the shortest comment is: {list_minmax[0]}")
+    print(f"the longest comment is: {list_minmax[-1]}")
+
+longest_and_shortest(twiter_list)

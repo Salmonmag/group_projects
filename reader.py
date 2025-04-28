@@ -8,7 +8,7 @@ def load_comments(filepath:str)->list[dict]:
             list_for_users = []
         for comment in file_of_full_comments:
             list_for_users.append(json.loads(comment))
-            return list_for_users
+        return list_for_users
 
     except FileNotFoundError as error:
         print(error)

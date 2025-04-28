@@ -2,18 +2,18 @@ import json
 #TODO: ליבא את כל הקבצים הרלוונטים
 def load_comments(filepath:str)->list[dict]:
     """מוציאה את מילוני התגובות מקובץ ה twitter"""
-    with open(filepath, "r", encoding="utf-8") as file:
-        file_of_full_comments = file.readlines()
-        list_for_users = []
+    try:
+        with open(filepath, "r", encoding="utf-8") as file:
+            file_of_full_comments = file.readlines()
+            list_for_users = []
         for comment in file_of_full_comments:
             list_for_users.append(json.loads(comment))
-        return list_for_users
+            return list_for_users
 
-    #TODO:
-    # 1.להשלים את ההערות
-    # 2.להשלים פונקציה
-    # 3.להןסיף טיפול בחריגות
-    # 4.להשלים פונקציה
+    except FileNotFoundError as error:
+        print(error)
+    except json.JSONDecodeError as error:
+        print(error)
 
 class CommentLoader:
     """מחזיר רשימה של כל התגובות ללא שמות משתמש בפורמט list"""

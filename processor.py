@@ -10,7 +10,22 @@ def processor(list: list)-> dict:
         else: #במידה והמשתמש קיים כבר, נוסיף עוד תגובה לרשימת
             comment_dict[temp_dict["reply_to"]].append(temp_dict["comment"])
     return comment_dict
-
+    
+def analyze_sentiment(comment: Comment) -> str:
+    stringi = Comment.strip().splite(" ")
+    positive_count = 0
+    negitive_count = 0
+    for word in stringi:
+        if word in negative_words:
+            negitive_count +=1
+        elif word in positive_words:
+            positive_count += 1
+    if positive_count > negitive_count:
+        return "positive"
+    elif negitive_count > positive_count:
+        return "negative"
+    else:
+        return "neutral"
 
 def find_short_comments(list: list):
     short_list = []
@@ -19,3 +34,12 @@ def find_short_comments(list: list):
         if stringi.count(" ") + 1 < 5: #נבדוק את האורך של הרצועה, בעזרת ספירת הרווחים(+1) בשביל המילה האחרונה
             short_list.append(stringi) # מוסיפים כל פעם שורה חדשה אם נמצא שהיא קטנה מחמש
     return short_list
+
+def find_emoji(list: list)-> list:
+    emoji_list = []
+    for i in range(len(list)):
+        for x in special_characters["special_characters"]:
+            stat = utils.fun_function(list[i]["comment"], x)
+            if stat == True:
+                emoji_list.append(list[i]["comment"])
+    return emoji_list

@@ -5,19 +5,20 @@ with open("special_characters.json", "r", encoding="utf-8") as file:
 print(special_characters) #מדפיס את הקובץ כדי לראות את כל הסימנים
 
 
-def clean(text: str , special_characters):
+def clean(text: str):
     """פונקציה שמנקה תווים מיוחדים ואמוגים ומחזירה טקסט חדש"""
     clean_text = ""
     for sigh in text:
-        if sigh not in special_characters:
+        if sigh not in special_characters['special_characters']:
             clean_text += sigh
     return clean_text
 
-def fun_function(text: str , special_characters):
+def fun_function(text: str):
     """בדיקה אם הטקסט מכיל אימוגים"""
     for f in text:
-        if f in special_characters:
-            return True
+        for j in special_characters['special_characters']:
+            if f == j:
+                return True
     return False
 
 def number_sigh(comment:str):
@@ -27,3 +28,4 @@ def number_sigh(comment:str):
         if i == "?":
             question_sigh += 1
     return question_sigh
+

@@ -4,23 +4,25 @@ with open("special_characters.json", "r", encoding="utf-8") as file:
 
 print(special_characters) #מדפיס את הקובץ כדי לראות את כל הסימנים
 
-text = "hello shoval ☆ ✦"
 
-def clean(text , special_characters):
-    clean_text = " "
-    found_emoji = False
-    for sigh in text: #עובר על כל אות בטקסט
-        if sigh in special_characters:
-            found_emoji = True
-        else: #במקרה אחר אם הסימן לא נמצא ברשימת אימוגים
-            clean_text += sigh #אם הוא לא הוא יוסיך אותו לרשימה ריקה כדי שיהיה לנו רשימה חדשה בלי סימנים
-    if found_emoji:
-        print("in text have a emoji")
-    return clean_text.strip()  #הדפסת הרשימה החדשה ללא רווחים מיותרים
+def clean(text: str , special_characters):
+    """פונקציה שמנקה תווים מיוחדים ואמוגים ומחזירה טקסט חדש"""
+    clean_text = ""
+    for sigh in text:
+        if sigh not in special_characters:
+            clean_text += sigh
+    return clean_text
 
+def fun_function(text: str , special_characters):
+    """בדיקה אם הטקסט מכיל אימוגים"""
+    for f in text:
+        if f in special_characters:
+            return True
+    return False
 
-def number_sigh(comment):
-    question_sigh = 0 
+def number_sigh(comment:str):
+    """פונקציה שמחזירה את מספר סימני השאלה בתגובה"""
+    question_sigh = 0
     for i in comment:
         if i == "?":
             question_sigh += 1

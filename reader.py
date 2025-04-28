@@ -2,19 +2,12 @@ import json
 #TODO: ליבא את כל הקבצים הרלוונטים
 def load_comments(filepath:str)->list[dict]:
     """מוציאה את מילוני התגובות מקובץ ה twitter"""
-
-    # import json
-    # dict_for_users = {'reply_to': [], 'comment': []}
-    # dict_for_comments = {}
-    # with open("twitter_data.json", "r", encoding="utf-8") as file:
-    #     str_file_of_full_comments = str(file.readlines())
-    #     list_of_full_comments = str_file_of_full_comments.split('{')
-    #     for comment in list_of_full_comments:
-    #         split_comment = comment.split('"')
-    #         dict_for_users[f"reply_to"].append(split_comment[3:4])
-    # print(dict_for_users)
-
-
+    with open(filepath, "r", encoding="utf-8") as file:
+        file_of_full_comments = file.readlines()
+        list_for_users = []
+        for comment in file_of_full_comments:
+            list_for_users.append(json.loads(comment))
+        return list_for_users
 
     #TODO:
     # 1.להשלים את ההערות

@@ -1,7 +1,7 @@
 # twit_list= [{"reply_to": "@AndreCVentura", "comment": "Por isso que o Chega é  um partido de instabilidade e não estabilidade. Numa altura de responsabilidade e respeito pelos portugueses. Querem moções de censura e votam contra moção de confiança. "},
 # {"reply_to": "@AndreCVentura", "comment": "Prepara-te para fazer as malas. Isto se ainda lá estiverem após as eleições "}]
 # חשוב לשים לב!!!! התוכנה כרגע עובדת לפי הרשימה בשורות 1-2, צריך לעדכן אותה לקליטה מJSON
-def processor(list: list)-> dict:
+def old_list_toNew_dict(list: list)-> dict:
     comment_dict = {}
     for i in range(len(twit_list)):
         temp_dict = twit_list[i]
@@ -43,3 +43,15 @@ def find_emoji(list: list)-> list:
             if stat == True:
                 emoji_list.append(list[i]["comment"])
     return emoji_list
+
+def comment_lengh(list: list):
+    comment_sort_list=[]
+    for i in range(len(list)):
+        comment_stringi = list[i]["comment"]
+        count_word = len(list[i]["comment"])
+        comment_sort_list.append((count_word, comment_stringi))
+    comment_sort_list.sort()
+    final_list = []
+    for stringi in comment_sort_list:
+        final_list.append(stringi[1])
+    return final_list

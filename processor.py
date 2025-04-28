@@ -26,13 +26,13 @@ def old_list_toNew_dict(list: list)-> dict:
     return comment_dict
 
 def analyze_sentiment(comment: Comment) -> str:
-    stringi = comment.text.strip().split(" ")
+    stringi = comment.text.strip().split(" ") #לוקחת את הטקסט מהאויבקט ללא רווחים בהתחלה או בסוף ומפרידה בין המילים
     positive_count = 0
     negitive_count = 0
-    for word in stringi:
-        if word in negative_words:
+    for word in stringi: #עובר על כל מילה בטקסט
+        if word in negative_words: #בודקת אם אותה מילה נממצאת ברשימת מילים השליליות ואם כן מוסיפה 1 לרשימה השלילית
             negitive_count +=1
-        elif word in positive_words:
+        elif word in positive_words: #אותו הדבר עם מילים חיוביות
             positive_count += 1
     if positive_count > negitive_count:
         return "positive"
@@ -43,11 +43,11 @@ def analyze_sentiment(comment: Comment) -> str:
 
 
 
-def find_short_comments(list: list):
+def find_short_comments(list: list)-> list: #מחפש תגובות בעלות פחות מ5 מילים
     short_list = []
     for i in range(len(list)):
-        stringi = list[i]["comment"].strip()
-        if stringi.count(" ") + 1 < 5:
+        stringi = list[i]["comment"].strip() #לוקח כל פעם תגובה אחרת מהרשימה
+        if stringi.count(" ") + 1 < 5: #אם בתגובה יש פחות מ5 מילים(+1 כי המערכת לא סופרת את המילה האחרונה בגלל שאין רווח)
             short_list.append(stringi)
     return short_list
 
@@ -56,8 +56,8 @@ def find_emoji(list: list)-> list:
     emoji_list = []
     for i in range(len(list)):
         for x in special_characters["special_characters"]:
-            stat = fun_function(list[i]["comment"], x)
-            if stat == True:
+            stat = fun_function(list[i]["comment"], x) #משתמשים בפונקציה לבדיקת אימוגי
+            if stat == True:#אם אחרי הבידקה התגלה שיש אימוגי, נכניס לרשימה חדשה ונחזיר
                 emoji_list.append(list[i]["comment"])
     return emoji_list
 
@@ -68,44 +68,44 @@ def comment_lengh(list: list):
         count_word = len(comment_stringi.strip().split(" "))
         comment_sort_list.append((count_word, comment_stringi))
     comment_sort_list.sort()
-    final_list = []
-    for stringi in comment_sort_list:
-        final_list.append(stringi)
-    return final_list
+    return comment_sort_list
 
 def most_positive_user(list:list):
-    update_dict = old_list_toNew_dict(list)
-    user_scores = {}
-    for user, comments in update_dict.items(): #עוברים על המילון ולוקחים את המפתח(שם) ורשימת התגובות
-        total_score = 0
-        for comment_text in comments: # עוברים על כל תגובה בנפרד בתוך הרשימת תגובות לכל משתמש
-            comment_obj = Comment(user, comment_text) #לוקחים את הערכים שיש לנו והופכים אותו לאובייקט
-            val = analyze_sentiment(comment_obj) # מכניסים את האוביקט שיש לנו לתוך הפונקציה בשביל לחשב אם התגובה חיובית או שלילית
-            if val == "positive":
-                total_score += 1 # אם התגובה חיובית מוספית למונה
-            elif val == "negative":
-                total_score -= 1 #אם שלילית מורידים מהמונה
-        user_scores[user] = total_score #מכניסים למילון תוצאות שלנו את המשתמש(מפתח) והערך הוא הציון הסופי
+    final_list = []
+    data_base=load_comments("twitter_data.json")
+    user_comments = {}
+    for i in data_base:
+        name = i["reply_to"]
+        comment = i["comment"]
+        if name not in user_comments:
+            user_comments[name] = []
+        user_comments[name].append(comment)
+    for name, comments in user_comments.items():
+        user = UserComments(name, comments)
+        amount = user.positive_ratio()
+        final_list.append((amount, name))
+    final_list.sort()
+    return final_list[-1][1]
 
-    most_positive = max(user_scores, key=user_scores.get) # עושה בדיקה של מי מהמשתמשים(בתוך המילון) בעל הציון הכי גבוה
-    return most_positive
 
-def most_negative_user(list:list):
-    update_dict = old_list_toNew_dict(list)
-    user_scores = {}
-    for user, comments in update_dict.items(): #עוברים על המילון ולוקחים את המפתח(שם) ורשימת התגובות
-        total_score = 0
-        for comment_text in comments: # עוברים על כל תגובה בנפרד בתוך הרשימת תגובות לכל משתמש
-            comment_obj = Comment(user, comment_text) #לוקחים את הערכים שיש לנו והופכים אותו לאובייקט
-            val = analyze_sentiment(comment_obj) # מכניסים את האוביקט שיש לנו לתוך הפונקציה בשביל לחשב אם התגובה חיובית או שלילית
-            if val == "positive":
-                total_score -= 1 # אם התגובה חיובית מוספית למונה
-            elif val == "negative":
-                total_score += 1 #אם שלילית מורידים מהמונה
-        user_scores[user] = total_score #מכניסים למילון תוצאות שלנו את המשתמש(מפתח) והערך הוא הציון הסופי
+def most_negative_user(list: list):
+    final_list = []
+    data_base = load_comments("twitter_data.json")
+    user_comments = {}
+    for i in data_base:
+        name = i["reply_to"]
+        comment = i["comment"]
+        if name not in user_comments:
+            user_comments[name] = []
+        user_comments[name].append(comment)
 
-    most_negative = max(user_scores, key=user_scores.get) # עושה בדיקה של מי מהמשתמשים(בתוך המילון) בעל הציון הכי גבוה
-    return most_negative
+    for name, comments in user_comments.items():
+        user = UserComments(name, comments)
+        amount = user.negative_ratio()
+        final_list.append((amount, name))
+    final_list.sort()
+    return final_list[-1][1]
+
 
 def longest_and_shortest(list:list):
     # list_minmax = []
@@ -120,4 +120,4 @@ def longest_and_shortest(list:list):
     print(f"the shortest comment is: {list_minmax[0]}")
     print(f"the longest comment is: {list_minmax[-1]}")
 
-longest_and_shortest(twiter_list)
+print(most_negative_user(twiter_list))

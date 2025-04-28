@@ -10,7 +10,6 @@ for i in comments_list:
     replyTo = i["reply_to"]
     comment = i['comment']
     comments_object_list.append(Comment(replyTo,comment))
-    users_list = list()
 dict_list = old_list_toNew_dict(comments_list).items()
 for x in dict_list:
     username = x[0]
